@@ -1,18 +1,16 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
 ### What is this repository for? ###
 
-* Quick summary
-* Version
+* This is a prototype es6/reactjs user interface dashboard.
+* Version 1
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
+* Clone this repo and npm install from the directory then run npm start and browse to localhost:3000
+* This is webpack-dev-server so hot reload will happen
+* Material UI
 * Database configuration
 * How to run tests
 * Deployment instructions
