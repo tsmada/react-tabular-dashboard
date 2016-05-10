@@ -2,7 +2,8 @@
 
 ### What is this repository for? ###
 
-* This is a prototype es6/reactjs user interface dashboard.
+* This is a prototype es6/reactjs user interface dashboard. Live demo can be seen @ [http://woodlandcapital.org:3000](Link URL)
+
 * Version 1
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
