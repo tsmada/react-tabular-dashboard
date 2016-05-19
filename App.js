@@ -7,6 +7,7 @@ import Divider from 'material-ui/Divider';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
+import FlatButton from 'material-ui/FlatButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Paper from 'material-ui/Paper';
@@ -14,7 +15,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import ReactDOM from 'react-dom';
 import DatePicker from 'material-ui/DatePicker';
+import Dialog from 'material-ui/Dialog';
 import Griddle from 'griddle-react';
+import gridRow from 'griddle-react';
+
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
@@ -23,7 +27,7 @@ export default class AppBarExampleIconMenu extends React.Component {
         return (
 <MuiThemeProvider muiTheme={getMuiTheme()}>
   <AppBar
-    title="Foreclosure Dashboard"
+    title={this.state}
     onLeftIconButtonTouchTap={this.handleToggle}
     iconElementLeft={<IconButton><NavigationClose /></IconButton>}
     iconElementRight={
@@ -107,6 +111,79 @@ export default class DrawerSimpleExample extends React.Component {
     );
   }
 }
+
+export default class DetailViewDialogConfirm extends React.Component {
+  constructor(props, state) {
+    super();
+    this.state = {open: false};
+    this.handleClose = this.handleClose.bind(this)
+    this.handleOpen = this.handleOpen.bind(this)
+  }
+
+  handleOpen(){
+    this.setState({open: true});
+  };
+
+  handleClose() {
+    this.setState({open: false});
+  };
+
+  render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleClose}
+      />,
+    ];
+
+    return (
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <div>
+        <Griddle results={this.props.data} useFixedHeader={true} resultsPerPage={10} onRowClick={this.handleOpen} />
+        <Dialog
+          title="Dialog With Actions"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          The actions in this window were passed in as an array of React objects.
+        </Dialog>
+      </div>
+    </MuiThemeProvider>
+    );
+  }
+}
+
+export default class App extends React.Component {
+    constructor() {
+        super();
+        this.handleRowClick = this.handleRowClick.bind(this);
+        this.state = {open: false};
+    }
+    handleRowClick() {
+        console.log('handling event')
+    }
+    render() {
+        return (
+           <div>
+           <AppBarExampleIconMenu/>
+           <DrawerSimpleExample open={this.state.open}/>
+           <div>
+            <DetailViewDialogConfirm data={this.props.data}/>
+           </div>
+           </div>
+        );
+    }
+};
+
 
 var fakeData =  [
   {
@@ -472,4 +549,5 @@ var fakeData =  [
 ];
 
 
-ReactDOM.render(<div><AppBarExampleIconMenu/><DrawerSimpleExample /><Griddle results={fakeData} useFixedHeader={true} resultsPerPage={10} /></div>, app);
+ReactDOM.render(<App data={fakeData}/>, app);
+//ReactDOM.render(<DetailViewDialogConfirm/>, app);
