@@ -3,6 +3,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
+const injectTapEventPlugin = require('react-tap-event-plugin');
 
 export default class DetailViewDialogConfirm extends React.Component {
 

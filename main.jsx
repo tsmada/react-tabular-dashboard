@@ -1,4 +1,4 @@
-import App from './App';
+import App from './App.jsx';
 // import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 // import FlatButton from 'material-ui/FlatButton';

@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Griddle from 'griddle-react';
-import Paper from 'react';
-import gridRow from 'griddle-react';
 import DetailViewDialogConfirm from './DetailViewDialogConfirm.jsx';
 import AppBarExampleIconMenu from './Appbar.jsx';
 import DrawerSimpleExample from './SlideFilter.jsx';
 
-var injectTapEventPlugin = require("react-tap-event-plugin");
+const injectTapEventPlugin = require('react-tap-event-plugin');
+
 injectTapEventPlugin();
 
 export default class App extends React.Component {
