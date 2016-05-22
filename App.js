@@ -53,8 +53,8 @@ export default class AppBarExampleIconMenu extends React.Component {
 
 export default class DrawerSimpleExample extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {open: false};
     this.handleToggle = this.handleToggle.bind(this)
     this.handleChangeDate = this.handleChangeDate.bind(this)
@@ -113,9 +113,9 @@ export default class DrawerSimpleExample extends React.Component {
 }
 
 export default class DetailViewDialogConfirm extends React.Component {
-  constructor(props, state) {
+  constructor() {
     super();
-    this.state = {open: false};
+    this.state = {open:false}
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
   }
@@ -146,7 +146,6 @@ export default class DetailViewDialogConfirm extends React.Component {
     return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <div>
-        <Griddle results={this.props.data} useFixedHeader={true} resultsPerPage={10} onRowClick={this.handleOpen} />
         <Dialog
           title="Dialog With Actions"
           actions={actions}
@@ -165,19 +164,22 @@ export default class DetailViewDialogConfirm extends React.Component {
 export default class App extends React.Component {
     constructor() {
         super();
-        this.handleRowClick = this.handleRowClick.bind(this);
         this.state = {open: false};
+        this.update = this.update.bind(this)
     }
     handleRowClick() {
         console.log('handling event')
     }
+
+    update(){
+        this.setState({open: true});
+    }
     render() {
         return (
            <div>
-           <AppBarExampleIconMenu/>
-           <DrawerSimpleExample open={this.state.open}/>
            <div>
-            <DetailViewDialogConfirm data={this.props.data}/>
+            <DetailViewDialogConfirm/>
+            <Griddle results={this.props.data} useFixedHeader={true} resultsPerPage={10} onRowClick={this.update} />
            </div>
            </div>
         );
