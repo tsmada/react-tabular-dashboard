@@ -7,6 +7,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
+const injectTapEventPlugin = require('react-tap-event-plugin');
 
 
 export default class AppBarExampleIconMenu extends React.Component {
@@ -14,7 +15,7 @@ export default class AppBarExampleIconMenu extends React.Component {
         return (
 <MuiThemeProvider muiTheme={getMuiTheme()}>
   <AppBar
-    title={this.state}
+    title="Foreclosure Dashboard"
     onLeftIconButtonTouchTap={this.handleToggle}
     iconElementLeft={<IconButton><NavigationClose /></IconButton>}
     iconElementRight={
