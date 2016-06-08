@@ -3,7 +3,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import { Router, Route, Link, browserHistory, hashHistory } from 'react-router'
+
 const injectTapEventPlugin = require('react-tap-event-plugin');
 
 export default class DetailViewDialogConfirm extends React.Component {
@@ -19,13 +19,12 @@ export default class DetailViewDialogConfirm extends React.Component {
         primary={true}
         onTouchTap={this.props.handleClose}
       />,
-      <Link to="/listings/1160529">
       <FlatButton
         label="Submit"
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.props.handleSubmit}
-      /></Link>,
+        />
     ];
 
     return (
@@ -38,7 +37,7 @@ export default class DetailViewDialogConfirm extends React.Component {
           open={this.props.open}
           onRequestClose={this.props.handleClose}
         >
-          Are you sure you want to navigate to this listing: {this.props.id}
+          Are you sure you want to navigate to this listing: {this.props.listing}
         </Dialog>
       </div>
     </MuiThemeProvider>
