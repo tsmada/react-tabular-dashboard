@@ -4,11 +4,57 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import React from 'react';
 
 export default class TableExampleSimple extends React.Component {
-	render(props) {
-		return (
-	<MuiThemeProvider muiTheme={getMuiTheme()}>
-  <Table>
-    <TableHeader>
+
+    update(e) {
+        console.log('updating',e);
+    }
+
+    constructor(props) {
+        super(props);
+        this.update = this.update.bind(this);
+        this.state = {
+      fixedHeader: true,
+      fixedFooter: true,
+      stripedRows: false,
+      showRowHover: true,
+      selectable: false,
+      multiSelectable: true,
+      enableSelectAll: true,
+      deselectOnClickaway: true,
+      showCheckboxes: false
+    }
+  }
+    render(props) {
+        if (!this.props.data) {
+            return null
+        }
+        var tableRows = this.props.data.map((row, index) => {
+      return (<TableRow key={index} onCellClick={this.update} >
+        <TableRowColumn>{row.casestatus}</TableRowColumn>
+        <TableRowColumn>{row.saledate}</TableRowColumn>
+        <TableRowColumn>{row.propertyzip}</TableRowColumn>
+        <TableRowColumn>{row.propertyaddress}</TableRowColumn>
+        <TableRowColumn>{row.propertyuse}</TableRowColumn>
+        <TableRowColumn>{row.finaljudgement}</TableRowColumn>
+        <TableRowColumn>{row.county}</TableRowColumn>
+        <TableRowColumn>{row.assessedvalue}</TableRowColumn>
+        <TableRowColumn>{row.maxbid}</TableRowColumn>
+        <TableRowColumn>{row.parcelid}</TableRowColumn>
+      </TableRow>)});
+
+        return (
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+  <Table
+    fixedHeader={this.state.fixedHeader}
+    fixedFooter={this.state.fixedFooter}
+    selectable={this.state.selectable}
+    multiSelectable={this.state.multiSelectable}
+  >
+    <TableHeader
+    displaySelectAll={this.state.showCheckboxes}
+    adjustForCheckbox={this.state.showCheckboxes}
+    enableSelectAll={this.state.enableSelectAll}
+    >
       <TableRow>
         <TableHeaderColumn>Case Status</TableHeaderColumn>
         <TableHeaderColumn>Auction Date</TableHeaderColumn>
@@ -22,55 +68,13 @@ export default class TableExampleSimple extends React.Component {
         <TableHeaderColumn>Parcel ID</TableHeaderColumn>
       </TableRow>
     </TableHeader>
-    <TableBody>
-      <TableRow>
-        <TableRowColumn>Accepting Proxy (Bid)</TableRowColumn>
-        <TableRowColumn>07/10/2017</TableRowColumn>
-        <TableRowColumn>32254</TableRowColumn>
-        <TableRowColumn>3022 Brougham Ave</TableRowColumn>
-        <TableRowColumn>Single Family</TableRowColumn>
-        <TableRowColumn>$24,700.00</TableRowColumn>
-        <TableRowColumn>Duval</TableRowColumn>
-        <TableRowColumn>$32,000.00</TableRowColumn>
-        <TableRowColumn>$18,200.00</TableRowColumn>
-        <TableRowColumn>1668870000</TableRowColumn>
-      </TableRow>
-      <TableRow>
-        <TableRowColumn>Accepting Proxy (Bid)</TableRowColumn>
-        <TableRowColumn>07/11/2017</TableRowColumn>
-        <TableRowColumn>32205</TableRowColumn>
-        <TableRowColumn>382 Stockton Ave</TableRowColumn>
-        <TableRowColumn>Single Family</TableRowColumn>
-        <TableRowColumn>$80,700.00</TableRowColumn>
-        <TableRowColumn>Duval</TableRowColumn>
-        <TableRowColumn>$32,000.00</TableRowColumn>
-        <TableRowColumn>$18,200.00</TableRowColumn>
-        <TableRowColumn>1622370000</TableRowColumn>
-      </TableRow>
-      <TableRow>
-        <TableRowColumn>Accepting Proxy (Bid)</TableRowColumn>
-        <TableRowColumn>07/12/2017</TableRowColumn>
-        <TableRowColumn>32210</TableRowColumn>
-        <TableRowColumn>1800 Southside Blvd</TableRowColumn>
-        <TableRowColumn>Commercial</TableRowColumn>
-        <TableRowColumn>$240,700.00</TableRowColumn>
-        <TableRowColumn>Duval</TableRowColumn>
-        <TableRowColumn>$320,000.00</TableRowColumn>
-        <TableRowColumn>$180,200.00</TableRowColumn>
-        <TableRowColumn>12049934933</TableRowColumn>
-      </TableRow>
-      <TableRow>
-        <TableRowColumn>Accepting Proxy (Bid)</TableRowColumn>
-        <TableRowColumn>07/13/2017</TableRowColumn>
-        <TableRowColumn>32206</TableRowColumn>
-        <TableRowColumn>4500 Atlantic Ave</TableRowColumn>
-        <TableRowColumn>Single Family</TableRowColumn>
-        <TableRowColumn>$100,700.00</TableRowColumn>
-        <TableRowColumn>Duval</TableRowColumn>
-        <TableRowColumn>$89,000.00</TableRowColumn>
-        <TableRowColumn>$78,200.00</TableRowColumn>
-        <TableRowColumn>1930343000</TableRowColumn>
-      </TableRow>
+    <TableBody
+displayRowCheckbox={this.state.showCheckboxes}
+deselectOnClickaway={this.state.deselectOnClickaway}
+showRowHover={this.state.showRowHover}
+stripedRows={this.state.stripedRows}
+    >
+      {tableRows}
     </TableBody>
   </Table>
   </MuiThemeProvider>

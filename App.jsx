@@ -5,7 +5,7 @@ import DetailViewDialogConfirm from './DetailViewDialogConfirm.jsx';
 import AppBarExampleIconMenu from './Appbar.jsx';
 import DrawerSimpleExample from './SlideFilter.jsx';
 import ListingDetailView from './ListingDetailView.jsx';
-import DataGrid from './DataGrid.jsx';
+import TableExampleSimple from './DataGrid.jsx';
 import { Router, Route, Link, browserHistory, hashHistory } from 'react-router'
 
 const injectTapEventPlugin = require('react-tap-event-plugin');
@@ -20,6 +20,19 @@ export default class App extends React.Component {
     this.update = this.update.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  loadCommentsFromServer() {
+    $.ajax({
+      url: "http://localhost:8000/api/listings",
+      dataType: 'json',
+      success: (data) => {
+        this.setState({data: data});
+      },
+      error: (xhr, status, err) => {
+        console.error("http://localhost:8000/api/listings", status, err.toString());
+      }
+    });
   }
 
   componentDidMount() {
@@ -48,10 +61,8 @@ export default class App extends React.Component {
            <div>
            <AppBarExampleIconMenu />
            <DrawerSimpleExample />
-           <DataGrid data={this.state.data}/>
+           <TableExampleSimple data={this.state.data}/>
             <DetailViewDialogConfirm open={this.state.open} handleClose={this.handleClose} handleSubmit={this.handleSubmit} listing={this.state.listing}/>
-             <Griddle noDataMessage="Loading data..." columnMetadata={metadata} results={this.state.data} useFixedHeader={true} resultsPerPage={25} onRowClick={this.update} showSettings={true}
-             />
            </div>
            </div>
         );
