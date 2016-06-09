@@ -26,9 +26,6 @@ export default class TableExampleSimple extends React.Component {
     }
   }
     render(props) {
-        if (!this.props.data) {
-            return null
-        }
         var tableRows = this.props.data.map((row, index) => {
       return (<TableRow key={index}>
         <TableRowColumn>{row.casestatus}</TableRowColumn>

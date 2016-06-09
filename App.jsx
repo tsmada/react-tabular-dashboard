@@ -53,18 +53,19 @@ export default class App extends React.Component {
     handleClose() {
         this.setState({open: false});
     }
-    handleSubmit(e) {
-        const path = '/listing/' + this.state.id
+    handleSubmit() {
+        const path = '/listing/' + String(this.state.id)
         browserHistory.push(path)
         this.setState({open: false});
     }
     render() {
+        const rendertable = this.state.data ? <TableExampleSimple data={this.state.data} update={this.update}/> : '';
         return (
            <div>
            <div>
            <AppBarExampleIconMenu />
            <DrawerSimpleExample />
-           <TableExampleSimple data={this.state.data} update={this.update}/>
+           {rendertable}
             <DetailViewDialogConfirm open={this.state.open} handleClose={this.handleClose} handleSubmit={this.handleSubmit} listing={this.state.listing}/>
            </div>
            </div>
