@@ -7,6 +7,8 @@ import DrawerSimpleExample from './SlideFilter.jsx';
 import ListingDetailView from './ListingDetailView.jsx';
 import TableExampleSimple from './DataGrid.jsx';
 import { Router, Route, Link, browserHistory, hashHistory } from 'react-router'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const injectTapEventPlugin = require('react-tap-event-plugin');
 
@@ -16,7 +18,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: false, data: this.props.data, listing: null, id: 0, listingdata: []};
+    this.state = { open: false, data: this.props.data, listing: null, id: 0, listingdata: [], completed: 0};
     this.update = this.update.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,8 +45,9 @@ export default class App extends React.Component {
     console.log('component mounted');
   }
 
-    update(e){
-        this.setState({open: true, listing: e.props.data.propertyaddress, id: e.props.data.fcl_id});
+    update(e, f){
+        this.setState({open: true, listing: this.state.data[e].propertyaddress, id: this.state.data[e].fcl_id});
+        console.log('updating', this.state.data[e].propertyaddress);
     }
 
     handleClose() {
@@ -61,7 +64,7 @@ export default class App extends React.Component {
            <div>
            <AppBarExampleIconMenu />
            <DrawerSimpleExample />
-           <TableExampleSimple data={this.state.data}/>
+           <TableExampleSimple data={this.state.data} update={this.update}/>
             <DetailViewDialogConfirm open={this.state.open} handleClose={this.handleClose} handleSubmit={this.handleSubmit} listing={this.state.listing}/>
            </div>
            </div>
@@ -71,6 +74,7 @@ export default class App extends React.Component {
 
 const About1 = (props) => <div><h1>Hello</h1></div>;
 const NoMatch = (props) => <div><h1>woah patna 404 <Link to="about">Click Me</Link> </h1></div>;
+
 //const ListingDetailView = (props) => <div><h1>Listing Detail View: {this.props.id}</h1></div>;
 
 var fakeData = [

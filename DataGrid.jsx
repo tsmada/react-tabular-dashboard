@@ -2,6 +2,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import React from 'react';
+const injectTapEventPlugin = require('react-tap-event-plugin');
 
 export default class TableExampleSimple extends React.Component {
 
@@ -29,7 +30,7 @@ export default class TableExampleSimple extends React.Component {
             return null
         }
         var tableRows = this.props.data.map((row, index) => {
-      return (<TableRow key={index} onCellClick={this.update} >
+      return (<TableRow key={index}>
         <TableRowColumn>{row.casestatus}</TableRowColumn>
         <TableRowColumn>{row.saledate}</TableRowColumn>
         <TableRowColumn>{row.propertyzip}</TableRowColumn>
@@ -45,6 +46,7 @@ export default class TableExampleSimple extends React.Component {
         return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
   <Table
+    onCellClick={this.props.update}
     fixedHeader={this.state.fixedHeader}
     fixedFooter={this.state.fixedFooter}
     selectable={this.state.selectable}
