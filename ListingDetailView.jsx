@@ -34,6 +34,10 @@ export default class ListingDetailView extends React.Component {
       this.setState({ listingdata: result
       });
     }.bind(this));
+       this.serverRequest = $.get("http://localhost:8000/api/cma/" + String(this.props.params.id), function (result) {
+      this.setState({ cmadata: result
+      });
+    }.bind(this));
     }
     constructor(props) {
         super(props)
@@ -44,10 +48,11 @@ export default class ListingDetailView extends React.Component {
     render(props) {
       let listingdata = JSON.stringify(this.state.listingdata);
       console.log(this.state.listingdata);
-      const rendertabs = this.state.listingdata ? <TabsExampleIconText listingData={this.state.listingdata}/> : '';
+      const rendertabs = (this.state.listingdata && this.state.cmadata) ? <TabsExampleIconText listingData={this.state.listingdata} cmadata={this.state.cmadata}/> : '';
         return (
             <div>
             <AppBarExampleIconMenu/>
+            {rendertabs}
             <div>
             </div>
             </div>
@@ -90,18 +95,26 @@ export class TabsExampleIconText extends React.Component {
             <li>Year Built: {rows.yearbuilt}</li>
             </div>
        </div>
-       )});
+       )})
+
+    var cmadata = this.props.cmadata.map((rows, index) => {
+      return (
+            <div key={index}>
+            <h1>{rows.propertyaddress}</h1>
+            </div>
+            )});
+
     return(
     <MuiThemeProvider muiTheme={getMuiTheme()}>
   <Tabs>
     <Tab
       icon={<FontIcon className="material-icons">home</FontIcon>}
       label="Property Details"
-    >Tab one {listingdata}</Tab>
+    >{listingdata}</Tab>
     <Tab
       icon={<FontIcon className="material-icons">assessment</FontIcon>}
       label="CMA Underwriting"
-    >Tab Two</Tab>
+    >{cmadata}</Tab>
     <Tab
       icon={<FontIcon className="material-icons">search</FontIcon>}
       label="Title Search"

@@ -8,7 +8,11 @@ import ListingDetailView from './ListingDetailView.jsx';
 import TableExampleSimple from './DataGrid.jsx';
 import { Router, Route, Link, browserHistory, hashHistory } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { GoogleMap, Marker, SearchBox, GoogleMapLoader} from "react-google-maps";
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import ReactRoot from './ReactRoot.jsx';
+import SimpleMap from './SimpleMap.jsx';
+
 
 const injectTapEventPlugin = require('react-tap-event-plugin');
 
@@ -18,7 +22,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: false, data: this.props.data, listing: null, id: 0, listingdata: [], completed: 0};
+    this.state = { open: false, data: this.props.data, listing: null, id: 0, listingdata: [], completed: 0, propertycityac: [{}]};
     this.update = this.update.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,6 +44,10 @@ export default class App extends React.Component {
   componentDidMount() {
     this.serverRequest = $.get("http://localhost:8000/api/listings", function (result) {
       this.setState({ data: result
+      });
+    }.bind(this));
+    this.serverRequest = $.get("http://localhost:8000/api/top/propertycity", function (result) {
+      this.setState({ propertycityac: result
       });
     }.bind(this));
     console.log('component mounted');
@@ -64,7 +72,7 @@ export default class App extends React.Component {
            <div>
            <div>
            <AppBarExampleIconMenu />
-           <DrawerSimpleExample />
+           <DrawerSimpleExample propertycity={this.state.propertycityac}/>
            {rendertable}
             <DetailViewDialogConfirm open={this.state.open} handleClose={this.handleClose} handleSubmit={this.handleSubmit} listing={this.state.listing}/>
            </div>
@@ -76,372 +84,8 @@ export default class App extends React.Component {
 const About1 = (props) => <div><h1>Hello</h1></div>;
 const NoMatch = (props) => <div><h1>woah patna 404 <Link to="about">Click Me</Link> </h1></div>;
 
-//const ListingDetailView = (props) => <div><h1>Listing Detail View: {this.props.id}</h1></div>;
 
-var fakeData = [
-  {
-    "id": 0,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 25000,
-    "Plaintiff Max Bid": 3924,
-    "Zoning": "LUF20",
-    "Year Built": 1946,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 800,
-    "Features": "Pool"
-  },
-  {
-    "id": 2,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 400000,
-    "Plaintiff Max Bid": 39434,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": "Porch"
-  },
-  {
-    "id": 3,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PKG",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": "Garage"
-  },
-  {
-    "id": 4,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "RFD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 5,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 6,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 25000,
-    "Zoning": "RFD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 7,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 35000,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 3,
-    "Bedrooms": 2,
-    "Bathrooms": 1.5,
-    "Heated Area": 800,
-    "Features": null
-  },
-  {
-    "id": 8,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 20000,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 500,
-    "Features": null
-  },
-  {
-    "id": 9,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 39434,
-    "Zoning": "2LG",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 2500,
-    "Features": null
-  },
-  {
-    "id": 22,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 10,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 12,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "JFT",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 13,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0100 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 14,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1840 Pineapple Ave",
-    "Property Use": "0900 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "RFD",
-    "Year Built": 1996,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 15,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1820 Pineapple Ave",
-    "Property Use": "0800 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "RFD",
-    "Year Built": 1932,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 16,
-    "Case Status": "Cancelled",
-    "Auction Date": "01/10/2016",
-    "Zip": "32210",
-    "Physical Address": "1850 Pineapple Ave",
-    "Property Use": "0600 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1925,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 17,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "02/10/2016",
-    "Zip": "32230",
-    "Physical Address": "10 Pineapple Ave",
-    "Property Use": "0500 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1925,
-    "Stories": 1,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 18,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "04/10/2016",
-    "Zip": "32210",
-    "Physical Address": "320 Pineapple Ave",
-    "Property Use": "0400 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 2000,
-    "Stories": 2,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 19,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/30/2016",
-    "Zip": "32210",
-    "Physical Address": "120 Pineapple Ave",
-    "Property Use": "0300 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 1999,
-    "Stories": 4,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": null
-  },
-  {
-    "id": 20,
-    "Case Status": "Accepting Proxy",
-    "Auction Date": "06/11/2016",
-    "Zip": "32210",
-    "Physical Address": "1830 Pineapple Ave",
-    "Property Use": "0200 SINGLE FAMILY",
-    "Link": "link me",
-    "Assessed Value": 23232,
-    "Plaintiff Max Bid": 3943434,
-    "Zoning": "PUD",
-    "Year Built": 2001,
-    "Stories": 2,
-    "Bedrooms": 3,
-    "Bathrooms": 2.5,
-    "Heated Area": 1200,
-    "Features": "Pool"
-  }
-];
-
-var metadata = [{
+const metadata = [{
     "columnName": "casestatus",
     "order": 1,
     "locked": false,
